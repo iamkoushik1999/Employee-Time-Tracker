@@ -12,6 +12,7 @@ connectDB();
 import { errorHandler } from './middlewares/errorMiddleware.js';
 
 // Routes
+import employeeRoutes from './routes/employeeRoutes.js';
 
 // App
 const app = express();
@@ -23,6 +24,7 @@ app.use(cookieParser());
 app.use(compression());
 
 // Routes
+app.use('/api/v1/employees', employeeRoutes);
 
 // Error Handler
 app.use(errorHandler);
