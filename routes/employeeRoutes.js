@@ -6,6 +6,7 @@ import {
   login,
   listEmployees,
 } from '../controllers/employeeController.js';
+import { isAuthenticated } from '../middlewares/authMiddleware.js';
 
 // ---------------------------------------------------------------
 
@@ -16,6 +17,6 @@ router.post('/register', register);
 router.post('/login', login);
 
 // GETs
-router.get('/', listEmployees);
+router.get('/', isAuthenticated, listEmployees);
 
 export default router;

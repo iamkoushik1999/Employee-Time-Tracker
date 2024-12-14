@@ -5,24 +5,17 @@ import {
   hashPassword,
 } from '../helpers/passwordHelper.js';
 
-const employeeSchema = new mongoose.Schema(
+const adminSchema = mongoose.Schema(
   {
-    name: {
-      type: String,
-      required: true,
-    },
     email: {
       type: String,
-      required: true,
-      unique: true,
     },
     password: {
       type: String,
-      required: true,
     },
     role: {
       type: String,
-      default: 'employee',
+      default: 'admin',
     },
   },
   {
@@ -32,7 +25,7 @@ const employeeSchema = new mongoose.Schema(
 );
 
 // Hash Password
-employeeSchema.pre('save', async function (next) {
+adminSchema.pre('save', async function (next) {
   if (!this.isModified('password')) {
     return next();
   }
@@ -41,17 +34,17 @@ employeeSchema.pre('save', async function (next) {
 });
 
 // Match Password
-employeeSchema.method('comparePassword', async function (enteredPassword) {
+adminSchema.method('comparePassword', async function (enteredPassword) {
   return await comparePassword(enteredPassword, this.password);
 });
 
 // Reset Password Token
-employeeSchema.methods.getResetToken = function () {
+adminSchema.methods.getResetToken = function () {
   const { resetToken, hashedToken, expireTime } = generateResetToken();
   this.resetPasswordToken = hashedToken;
   this.resetPasswordExpire = expireTime;
   return resetToken;
 };
 
-const Employee = mongoose.model('Employee', employeeSchema);
-export default Employee;
+const adminModel = mongoose.model('Admin', adminSchema);
+export default adminModel;
